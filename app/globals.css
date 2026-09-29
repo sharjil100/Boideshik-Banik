@@ -1,0 +1,352 @@
+@import "tailwindcss";
+
+/* ============================================================
+   BOIDESHIK BANIK — design tokens
+   Palette sampled directly from the logo. Nothing here is a
+   Tailwind default; the scale is bespoke to the manifest
+   design language (bills of lading, container stencils).
+   ============================================================ */
+
+@theme {
+  /* --- hull & sea --- */
+  --color-navy-900: #061634;
+  --color-navy-800: #081e42;
+  --color-navy-700: #0e2f63;
+  --color-navy-600: #14417f;
+  --color-sea-500: #1b6dc1;
+  --color-sea-400: #3f8fd8;
+
+  /* --- container livery --- */
+  --color-crate-orange: #f5901e;
+  --color-crate-red: #d6252b;
+  --color-crate-green: #1a7a3c;
+
+  /* --- paper & ink (the manifest) --- */
+  --color-paper: #f4f1ea;
+  --color-paper-dim: #e6e1d6;
+  --color-paper-edge: #d4cdbd;
+  --color-ink: #10161f;
+  --color-ink-soft: #46505f;
+
+  /* --- type --- */
+  --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-bangla: var(--font-anek), var(--font-archivo), sans-serif;
+
+  /* --- motion --- */
+  --ease-crane: cubic-bezier(0.16, 0.84, 0.3, 1);
+  --ease-thud: cubic-bezier(0.34, 1.26, 0.64, 1);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+:root {
+  --shell-gutter: 1.25rem;
+  --rule: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  color-scheme: light;
+
+  /* Fractal-noise grain, inlined so it costs no request. Paper sections
+     need this — flat #F4F1EA reads as a CSS colour, grained it reads as
+     stock. */
+  --grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --shell-gutter: 3rem;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  /* The page below the hero is light, and the white card is inset from the
+     edges, so this tone is what shows in those margins. */
+  background: #e7edf2;
+  color: var(--color-paper);
+  font-family: var(--font-display);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* Lenis owns the scroll; without this the page is height-locked. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+::selection {
+  background: var(--color-crate-orange);
+  color: var(--color-navy-900);
+}
+
+/* ============================================================
+   Manifest primitives — the typographic system
+   ============================================================ */
+
+/* Stencilled container code / HS code / CBM readouts. */
+.manifest {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.manifest-sm {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Wide industrial display type — Archivo's width axis pushed out. */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.bangla {
+  font-family: var(--font-bangla);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+/* The dashed rule off a customs form. */
+.rule-perf {
+  border: 0;
+  border-top: 1px dashed color-mix(in srgb, currentColor 32%, transparent);
+  height: 0;
+  margin: 0;
+}
+
+/* Paper grain — sits over sections that use the paper ground. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  background-image: var(--grain-url);
+  background-size: 180px 180px;
+}
+
+/* Horizontal scrollers keep their scrollbar out of the design; the
+   carousel exposes arrows, drag and keyboard instead. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   Elevation
+   ============================================================ */
+
+/*
+ * Shadows are layered rather than single, and tinted toward the page's
+ * navy rather than pure black. A lone large black blur is the default
+ * look and reads as a sticker; stacking a tight contact shadow under a
+ * wider ambient one is how real light falls, and tinting it keeps the
+ * shadow in the same world as the rest of the palette.
+ */
+:root {
+  --shadow-card:
+    0 1px 2px rgba(23, 41, 63, 0.04),
+    0 4px 10px rgba(23, 41, 63, 0.05),
+    0 12px 28px rgba(23, 41, 63, 0.06);
+
+  --shadow-card-lift:
+    0 2px 4px rgba(23, 41, 63, 0.05),
+    0 10px 20px rgba(23, 41, 63, 0.08),
+    0 26px 52px rgba(23, 41, 63, 0.11);
+
+  --shadow-feature:
+    0 4px 12px rgba(16, 40, 61, 0.14),
+    0 18px 40px rgba(16, 40, 61, 0.18),
+    0 44px 84px rgba(16, 40, 61, 0.14);
+
+  --shadow-panel:
+    0 2px 6px rgba(23, 41, 63, 0.05),
+    0 14px 34px rgba(23, 41, 63, 0.08);
+
+  /* Products sit on the card rather than floating over it. */
+  --shadow-product: drop-shadow(0 16px 20px rgba(23, 41, 63, 0.2));
+  --shadow-product-strong: drop-shadow(0 22px 28px rgba(8, 20, 34, 0.42));
+}
+
+.elev-card {
+  box-shadow: var(--shadow-card);
+  transition:
+    box-shadow 0.45s cubic-bezier(0.22, 0.75, 0.3, 1),
+    transform 0.45s cubic-bezier(0.22, 0.75, 0.3, 1);
+}
+
+.elev-card:hover {
+  box-shadow: var(--shadow-card-lift);
+  transform: translateY(-4px);
+}
+
+.elev-feature {
+  box-shadow: var(--shadow-feature);
+  transition:
+    box-shadow 0.45s cubic-bezier(0.22, 0.75, 0.3, 1),
+    transform 0.45s cubic-bezier(0.22, 0.75, 0.3, 1);
+}
+
+.elev-feature:hover {
+  transform: translateY(-4px);
+}
+
+.elev-panel {
+  box-shadow: var(--shadow-panel);
+}
+
+.elev-product {
+  filter: var(--shadow-product);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elev-card:hover,
+  .elev-feature:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Wordmark reveal — the hero name spells itself in on load
+   ============================================================ */
+
+@keyframes bb-letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.16em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bb-letter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bb-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: bb-letter-in 0.52s cubic-bezier(0.22, 0.75, 0.3, 1) both;
+}
+
+/* Bangla variant.
+   Bengali letterforms carry the শিরোরেখা — the headline bar across the top
+   of a word — and vowel signs that sit around their consonant. Making each
+   cluster an inline-block introduces sub-pixel gaps that break that bar,
+   and transforms would shift signs off their base. So the Bangla reveal
+   stays inline and animates opacity only, which leaves shaping untouched. */
+.bb-letter-bn {
+  display: inline;
+  opacity: 0;
+  animation: bb-letter-fade 0.52s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-letter,
+  .bb-letter-bn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   Hero loader
+   ============================================================ */
+
+/*
+ * The overlay is hidden by default and only revealed when the inline
+ * script in the document head sets data-loader="on" before first paint.
+ * Deciding in React instead would mean a flash of the page for viewers
+ * who should see the loader, or a flash of the loader for viewers who
+ * should not.
+ *
+ * The fade-out is a CSS animation rather than JavaScript on purpose: if
+ * the script fails, the video stalls, or the file never downloads, the
+ * overlay still clears itself and the site is never held hostage by it.
+ * JavaScript can only make it leave sooner.
+ */
+#hero-loader {
+  display: none;
+}
+
+html[data-loader="on"] #hero-loader {
+  display: block;
+  animation: bb-loader-out 0.8s cubic-bezier(0.4, 0, 0.2, 1) 2.9s both;
+}
+
+html[data-loader="on"] #hero-loader.is-done {
+  animation: bb-loader-out 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes bb-loader-out {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  99% {
+    opacity: 0;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ============================================================
+   Accessibility
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-crate-orange);
+  outline-offset: 3px;
+}

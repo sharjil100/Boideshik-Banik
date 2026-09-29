@@ -1,0 +1,63 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+
+# production
+*.tsbuildinfo
+
+# environment
+.env
+.env*.local
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# vercel
+.vercel
+
+# ----------------------------------------------------------------------
+# Source artwork, kept out of version control
+#
+# These are the originals the optimised, shipped assets were produced
+# from — 44 MB of them against 2.6 MB actually referenced by the site.
+# Git keeps every byte forever, so committing them would make the repo
+# permanently ~20x larger than the site it builds.
+#
+# Nothing here is deleted from disk; this only keeps it out of history.
+# If you want an original back in the repo, remove its line below.
+# ----------------------------------------------------------------------
+
+# Originals superseded by the webp/jpg the site loads
+/public/images/*.png
+/public/images/*.svg
+
+# Earlier hero plates, replaced by the matched pair in /public/images/hero/
+/public/images/hero-port.webp
+/public/images/hero-ship.webp
+/public/images/hero-sky.jpg
+/public/images/hero-water.jpg
+
+# Raw 10s clip; /public/video/hero-loader.mp4 is the 3.5s cut that ships
+/public/hero-video.mp4
+
+# Stray exports
+/public/images/full*
+/public/images/a_wide_*
+
+# Diagnostic render from the logo-treatment comparison
+/logo-compare.png
